@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Simply mBanking</string>
+    
+    <string name="login">LOGIN</string>
+    <string name="register">REGISTER</string>
+    <string name="change_user">Change user</string>
+    <string name="pin">PIN</string>
+    <string name="name">First name</string>
+    <string name="surname">Last name</string>
+    <string name="forward">Continue</string>
+    <string name="enter_your_pin">Enter your PIN</string>
+</resources>

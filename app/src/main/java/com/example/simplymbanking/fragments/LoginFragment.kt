@@ -15,6 +15,8 @@ import com.example.simplymbanking.models.User
 import com.example.simplymbanking.viewmodels.UserListViewModel
 import java.util.*
 
+private const val USER_KEY = "user key"
+
 class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
     RegisteredUsersListFragment.ChosenRegisteredUser {
 
@@ -76,6 +78,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
                 user?.let {
                     this.user = user
                     updateUI(user)
+                    saveUserPreferences(user.id)
                 }
             }
         )
@@ -85,7 +88,6 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         super.onStart()
         user = User()
 
-        //prije postavi pravilno ime i prezime usera
         loginButton.setOnClickListener {
             user.name = userNameLoginTextView.text.toString()
             user.surname = userSurnameLoginTextView.text.toString()
@@ -115,24 +117,36 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         callbacksLogin = null
     }
 
-    private fun updateUI(user : User) {
+    private fun updateUI(user: User) {
         userNameLoginTextView.text = user.name
         userSurnameLoginTextView.text = user.surname
+        //spremiti user.id i FALSE  u shared pref
+        //nakon unosa ispravnog PIN-a , shared pref TRUE
     }
 
 
     private fun showDialog() {
+
+        /*
         LoginDialogFragment().apply {
             setTargetFragment(this@LoginFragment, 1)
         }
 
-        /*
+         */
+
+
         val dialog = LoginDialogFragment()
         dialog.setTargetFragment(this@LoginFragment, 1)
 
         dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogFragmentTheme)
         dialog.show(parentFragmentManager, "loginDialog")
 
+        /*
+        val dialog = RegisterDialogFragment()
+        dialog.setTargetFragment(this@RegisterFragment, 1)
+
+        dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogFragmentTheme)
+        dialog.show(parentFragmentManager, "registerDialog")
          */
     }
 
@@ -144,5 +158,16 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         dialog.show(parentFragmentManager, "registerDialog")
     }
 
+    //
+    private fun saveUserPreferences(userId: UUID) {
+        val sharedPreferences = activity?.getSharedPreferences(
+            "shared preferences user",
+            Context.MODE_PRIVATE
+        )
+        val editor = sharedPreferences!!.edit()
+
+        editor.putString(USER_KEY, userId.toString())
+        editor.apply()
+    }
 
 }

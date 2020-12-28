@@ -32,6 +32,7 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
     //interface method
     override fun sendPinToFragment(pin: String) {
         user.pin = pin
+        checkPin = pin
     }
 
     interface Callbacks {
@@ -39,6 +40,7 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         fun goToFragmentLogin()
     }
 
+    private var checkPin = ""
     private var callbacks: Callbacks? = null
     private lateinit var user: User
     private lateinit var loginTextViewClickable: TextView
@@ -78,6 +80,7 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         finishRegistrationButton.visibility = View.INVISIBLE
+        updateUI()
     }
 
     override fun onStart() {
@@ -90,14 +93,13 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
             user.surname = lastNameEditText.text.toString()
 
             showDialog()
-            finishRegistrationButton.visibility = View.VISIBLE
+
         }
 
         finishRegistrationButton.setOnClickListener {
+            //getFromApi()
             userListViewModel.registerUser(user)
             callbacks?.onDialogFinishedUserRegistered(user.id)
-
-            //getFromApi()
         }
 
         loginTextViewClickable.setOnClickListener {
@@ -119,6 +121,11 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         dialog.show(parentFragmentManager, "registerDialog")
     }
 
+    private fun updateUI() {
+        if (checkPin.length >= 4 && checkPin.length <= 6) {
+            finishRegistrationButton.visibility = View.VISIBLE
+        }
+    }
 
     //RETROFIT
     private fun getFromApi() {

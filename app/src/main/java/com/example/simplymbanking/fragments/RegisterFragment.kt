@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -30,15 +29,14 @@ private const val TAG = "RegisterFragment"
 
 class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
 
-
-    interface Callbacks {
-        fun onDialogFinishedUserRegistered(userId: UUID)
-    }
-
     //interface method
     override fun sendPinToFragment(pin: String) {
         user.pin = pin
-        Toast.makeText(context, user.pin + "je pin predan u fragment", Toast.LENGTH_SHORT).show()
+    }
+
+    interface Callbacks {
+        fun onDialogFinishedUserRegistered(userId: UUID)
+        fun goToFragmentLogin()
     }
 
     private var callbacks: Callbacks? = null
@@ -96,14 +94,20 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         }
 
         finishRegistrationButton.setOnClickListener {
-            callbacks?.onDialogFinishedUserRegistered(user.id)
             userListViewModel.registerUser(user)
+            callbacks?.onDialogFinishedUserRegistered(user.id)
+
+            //getFromApi()
+        }
+
+        loginTextViewClickable.setOnClickListener {
+            callbacks?.goToFragmentLogin()
         }
     }
 
     override fun onDetach() {
         super.onDetach()
-        //callbacks = null
+        callbacks = null
     }
 
     private fun showDialog() {
@@ -115,11 +119,15 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         dialog.show(parentFragmentManager, "registerDialog")
     }
 
+
+    //RETROFIT
     private fun getFromApi() {
+
         val retrofit: Retrofit = Builder()
-            .baseUrl("http://mobile.asseco-see.hr")
+            .baseUrl("https://mobile.asseco-see.hr/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
 
         val zadatakApi: ZadatakApi = retrofit.create(ZadatakApi::class.java)
 

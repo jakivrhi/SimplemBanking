@@ -9,7 +9,7 @@ import java.util.*
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks {
+class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks, LoginFragment.CallbacksLogin {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks {
 
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment == null) {
-            val fragment = LoginFragment()
+            val fragment = RegisterFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
@@ -25,11 +25,31 @@ class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks {
     }
 
     override fun onDialogFinishedUserRegistered(userId: UUID) {
-        val fragment = AccountListFragment()
+        val fragment = AccountListFragment.newInstance(userId)
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
+            .commit()
+    }
+
+    override fun goToFragmentLogin() {
+        val fragment = LoginFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
+    }
+
+    override fun onLoginDialogFinished(userId: UUID) {
+        //
+    }
+
+    override fun goToFragmentRegister() {
+        val fragment = RegisterFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 

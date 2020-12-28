@@ -17,17 +17,17 @@ class UserListViewModel : ViewModel() {
     val userListLiveData = userRepository.getUsers()
 
     //stores the id of user currently displayed
-    val userIdLiveData = MutableLiveData<UUID>()
+    private val userIdLiveData = MutableLiveData<UUID>()
 
-    var userLiveData: LiveData<User?> = Transformations.switchMap(userIdLiveData) {
-        userRepository.getUser(it)
+    var userLiveData: LiveData<User?> = Transformations.switchMap(userIdLiveData) { userId ->
+        userRepository.getUser(userId)
     }
 
     fun loadUser(userId: UUID) {
         userIdLiveData.value = userId
     }
 
-
+    //add user
     fun registerUser(user: User) {
         userRepository.registerUser(user)
     }

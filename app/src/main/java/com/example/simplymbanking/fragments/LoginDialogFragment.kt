@@ -1,8 +1,10 @@
 package com.example.simplymbanking.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,11 @@ import com.example.simplymbanking.R
 private const val TAG = "LoginDialogFragment"
 
 class LoginDialogFragment : DialogFragment() {
+
+    interface LoginPinEntered {
+        fun sendLoginPinToFragment(pin : String)
+    }
+    var loginPinEntered : LoginPinEntered? = null
 
     var pin: String = ""
     private lateinit var button0: Button
@@ -31,6 +38,14 @@ class LoginDialogFragment : DialogFragment() {
     private lateinit var deleteButton: ImageButton
     private lateinit var loginButton: Button
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            loginPinEntered = targetFragment as LoginPinEntered?
+        }catch (e : ClassCastException) {
+            Log.e(TAG, "onAttach: ClassCastException" + e.message )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,9 +116,11 @@ class LoginDialogFragment : DialogFragment() {
 
         loginButton.setOnClickListener {
             pin = this.pinEditText.text.toString()
+            if(validatePin(pin.length)){
+                loginPinEntered?.sendLoginPinToFragment(pin)
+                this.dismiss()
+            }
 
-
-            this.dismiss()
         }
     }
 

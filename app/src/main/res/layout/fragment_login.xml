@@ -73,15 +73,31 @@
             app:layout_constraintTop_toBottomOf="@id/login_text_view" />
 
         <TextView
-            android:id="@+id/user_name_surname_text_view"
+            android:id="@+id/user_surname_login_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto_slab_bold"
+            android:text="BOND"
+            android:textColor="@color/Black"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/user_name_login_text_view"
+            app:layout_constraintTop_toTopOf="@id/user_name_login_text_view" />
+
+        <TextView
+            android:id="@+id/user_name_login_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
             android:fontFamily="@font/roboto_slab_bold"
-            android:text="James Bond"
+            android:text="JAMES"
             android:textColor="@color/Black"
-            android:textSize="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toStartOf="@+id/user_surname_login_text_view"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/underline_button" />
 
@@ -112,7 +128,7 @@
             android:textColor="@color/White"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/user_name_surname_text_view" />
+            app:layout_constraintTop_toBottomOf="@id/user_name_login_text_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -10,5 +10,8 @@ class SimplymBankingApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         UserRepository.initialize(this)
+
+        //HANDSHAKE FAILED ERROR, DONT KNOW WHY
+
     }
 }

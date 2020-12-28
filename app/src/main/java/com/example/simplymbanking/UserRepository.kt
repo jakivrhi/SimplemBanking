@@ -15,7 +15,6 @@ private const val DATABASE_NAME = "user-database"
 //logic for accessing data
 class UserRepository private constructor(context: Context) {
 
-
     //creates a concrete implementation of abstract UserDatabase
     //(context, database class Room creates, name of the database file Room creates)
     private val database: UserDatabase = Room.databaseBuilder(
@@ -25,6 +24,7 @@ class UserRepository private constructor(context: Context) {
     ).fallbackToDestructiveMigration().build()
 
     private val userDao = database.userDao()
+
     /*
     An Executor is an object that references a thread. An executor instance has a function called
     execute that accepts a block of code to run. The code you provide in the block will run on
@@ -36,11 +36,13 @@ class UserRepository private constructor(context: Context) {
      */
     private val executor = Executors.newSingleThreadExecutor()
 
+    fun getUsers(): LiveData<List<User>> {
+        return userDao.getUsers()
+    }
 
-    fun getUsers(): LiveData<List<User>> = userDao.getUsers()
-
-    fun getUser(id: UUID): LiveData<User?> = userDao.getUser(id)
-
+    fun getUser(id: UUID): LiveData<User?> {
+        return userDao.getUser(id)
+    }
 
     fun registerUser(user: User) {
         executor.execute {

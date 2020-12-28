@@ -67,7 +67,7 @@ class TransactionListFragment : Fragment() {
                     SimpleDateFormat("d.m.YYYY. ").format(transaction.date)
                 transactionTypeTextView.text = transaction.transactionType.toString()
                 transactionDescriptionTextView.text = transaction.description
-                transactionAmountTextView.text = transaction.amount.toString()
+                //transactionAmountTextView.text = transaction.amount.toString()
             }
         }
 

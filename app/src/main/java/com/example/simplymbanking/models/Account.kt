@@ -6,6 +6,6 @@ data class Account(
     @SerializedName("id") var id: String,
     @SerializedName("IBAN") var iban: String,
     @SerializedName("amount") var amount: Double,
-    @SerializedName("transactions") var transList: MutableList<Transaction> = mutableListOf()
+    @SerializedName("transactions") var transList: List<Transaction> = listOf()
 ) {
 }

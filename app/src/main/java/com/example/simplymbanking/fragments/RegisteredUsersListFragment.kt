@@ -27,6 +27,7 @@ class RegisteredUsersListFragment : DialogFragment() {
     }
 
     private var chosenRegisteredUser: ChosenRegisteredUser? = null
+
     private lateinit var registeredUsersRecyclerView: RecyclerView
     private var adapter: RegisteredUsersAdapter? = RegisteredUsersAdapter(emptyList())
 

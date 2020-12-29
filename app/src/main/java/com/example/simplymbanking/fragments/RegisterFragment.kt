@@ -13,17 +13,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.simplymbanking.R
-import com.example.simplymbanking.api.ZadatakApi
-import com.example.simplymbanking.models.Account
 import com.example.simplymbanking.models.User
+import com.example.simplymbanking.viewmodels.AccountListViewModel
 import com.example.simplymbanking.viewmodels.UserListViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.Retrofit.Builder
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+
 
 private const val TAG = "RegisterFragment"
 
@@ -39,6 +33,9 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         fun onDialogFinishedUserRegistered(userId: UUID)
         fun goToFragmentLogin()
     }
+
+    //NOVO
+    private lateinit var accountListViewModel: AccountListViewModel
 
     private var checkPin = ""
     private var callbacks: Callbacks? = null
@@ -61,6 +58,11 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         callbacks = context as Callbacks?
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        accountListViewModel = ViewModelProvider(this).get(AccountListViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -80,7 +82,6 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         finishRegistrationButton.visibility = View.INVISIBLE
-        updateUI()
     }
 
     override fun onStart() {
@@ -93,12 +94,15 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
             user.surname = lastNameEditText.text.toString()
 
             showDialog()
-
+            finishRegistrationButton.visibility = View.VISIBLE
         }
 
         finishRegistrationButton.setOnClickListener {
             //getFromApi()
+
+            user.accountList = accountListViewModel.accountListItemLiveData.value!!.accounts
             userListViewModel.registerUser(user)
+            Log.d(TAG, "onStart: " + user.accountList[0].amount + " DOBRO JE")
             callbacks?.onDialogFinishedUserRegistered(user.id)
         }
 
@@ -121,40 +125,60 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         dialog.show(parentFragmentManager, "registerDialog")
     }
 
-    private fun updateUI() {
-        if (checkPin.length >= 4 && checkPin.length <= 6) {
-            finishRegistrationButton.visibility = View.VISIBLE
-        }
-    }
-
     //RETROFIT
     private fun getFromApi() {
+
+        /*
+        val zadatakLiveData: LiveData<AccountList> = ZadatakFetchr().fetchContents()
+        zadatakLiveData.observe(
+            this, androidx.lifecycle.Observer { responseAccountList ->
+                Log.d(TAG, "getFromApi: $responseAccountList")
+            }
+        )
+
+         */
+
+        accountListViewModel = ViewModelProvider(this).get(AccountListViewModel::class.java)
+        /*
+        //fix for HANDSHAKE  mobile.asseco-see.hr supports TLS 1.0
+        var tlsSpecs: MutableList<ConnectionSpec> = Arrays.asList(ConnectionSpec.COMPATIBLE_TLS)
+
+        val client = OkHttpClient.Builder()
+            .connectionSpecs(tlsSpecs)
+            .build()
 
         val retrofit: Retrofit = Builder()
             .baseUrl("https://mobile.asseco-see.hr/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
 
 
         val zadatakApi: ZadatakApi = retrofit.create(ZadatakApi::class.java)
 
-        val call: Call<List<Account>> = zadatakApi.fetchContents()
 
-        call.enqueue(object : Callback<List<Account>> {
-            override fun onResponse(call: Call<List<Account>>, response: Response<List<Account>>) {
-                Log.d(TAG, "onResponse: ")
 
-                val accounts: List<Account>? = response.body()
-                if (accounts != null) {
-                    user.accountList = accounts
+        val call: Call<AccountList> = zadatakApi.fetchContents()
+
+        call.enqueue(object : Callback<AccountList> {
+            override fun onResponse(call: Call<AccountList>, response: Response<AccountList>) {
+                Log.d(TAG, "onResponse: " +response.code())
+
+                val userRecieved: AccountList? = response.body()
+
+                if (userRecieved != null) {
+                    user.accountList = userRecieved.accounts
+                    //Log.d(TAG, "onResponse: " + user.accountList[0].amount.toString())
                 }
             }
 
-            override fun onFailure(call: Call<List<Account>>, t: Throwable) {
+            override fun onFailure(call: Call<AccountList>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch", t)
             }
 
         })
+
+         */
     }
 
 }

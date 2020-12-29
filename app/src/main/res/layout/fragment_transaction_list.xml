@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp">
@@ -11,9 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto_slab_bold"
-        android:text="James Bond"
         android:textColor="@color/Black"
-        android:textSize="16sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,11 +35,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            android:text="HR123456789012345678901"
             android:textColor="@color/White"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="HR222233334444555577771" />
 
         <TextView
             android:id="@+id/account_balance_text_view"
@@ -47,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:fontFamily="@font/roboto_slab_bold"
-            android:text="Balance"
+            android:text="@string/balance"
             android:textColor="@color/White"
             app:layout_constraintEnd_toEndOf="@id/account_iban_text_view"
             app:layout_constraintStart_toStartOf="@id/account_iban_text_view"
@@ -55,30 +56,30 @@
 
         <TextView
             android:id="@+id/account_balance_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="58dp"
+            android:layout_height="19dp"
             android:layout_margin="6dp"
-            android:text="2.523,00"
             android:textColor="@color/White"
             app:layout_constraintEnd_toEndOf="@id/account_balance_text_view"
             app:layout_constraintEnd_toStartOf="@+id/balance_amount_currency_text_view"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/account_balance_text_view" />
+            app:layout_constraintTop_toBottomOf="@id/account_balance_text_view"
+            tools:text="2.532,00" />
 
         <TextView
             android:id="@+id/balance_amount_currency_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="HRK"
             android:textColor="@color/White"
             app:layout_constraintBottom_toBottomOf="@id/account_balance_amount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/account_balance_amount"
-            app:layout_constraintTop_toTopOf="@id/account_balance_amount" />
+            app:layout_constraintTop_toTopOf="@id/account_balance_amount"
+            tools:text="HRK" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -90,7 +91,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto_slab_bold"
-        android:text="Last transactions"
+        android:text="@string/last_transactions"
         android:textColor="@color/Black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_zoomed_constraint_layout" />

@@ -16,6 +16,8 @@ import com.example.simplymbanking.viewmodels.UserListViewModel
 import java.util.*
 
 private const val USER_KEY = "user key"
+private const val NAME_KEY = "name key"
+private const val SURNAME_KEY = "surname key"
 
 class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
     RegisteredUsersListFragment.ChosenRegisteredUser {
@@ -49,10 +51,12 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         ViewModelProvider(this).get(UserListViewModel::class.java)
     }
 
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacksLogin = context as CallbacksLogin?
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,9 +69,8 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         registerTextViewClickable = view.findViewById(R.id.register_text_view) as TextView
         loginButton = view.findViewById(R.id.login_button) as Button
         changeUserTextViewClickable = view.findViewById(R.id.change_user_text_view) as TextView
-        userNameLoginTextView = view.findViewById(R.id.user_name_login_text_view)
-        userSurnameLoginTextView = view.findViewById(R.id.user_surname_login_text_view)
-
+        userNameLoginTextView = view.findViewById(R.id.user_name_login_text_view) as TextView
+        userSurnameLoginTextView = view.findViewById(R.id.user_surname_login_text_view) as TextView
         return view
     }
 
@@ -78,7 +81,6 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
                 user?.let {
                     this.user = user
                     updateUI(user)
-                    saveUserPreferences(user.id)
                 }
             }
         )
@@ -115,6 +117,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
     override fun onDetach() {
         super.onDetach()
         callbacksLogin = null
+
     }
 
     private fun updateUI(user: User) {
@@ -126,28 +129,11 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
 
 
     private fun showDialog() {
-
-        /*
-        LoginDialogFragment().apply {
-            setTargetFragment(this@LoginFragment, 1)
-        }
-
-         */
-
-
         val dialog = LoginDialogFragment()
         dialog.setTargetFragment(this@LoginFragment, 1)
 
         dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogFragmentTheme)
         dialog.show(parentFragmentManager, "loginDialog")
-
-        /*
-        val dialog = RegisterDialogFragment()
-        dialog.setTargetFragment(this@RegisterFragment, 1)
-
-        dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogFragmentTheme)
-        dialog.show(parentFragmentManager, "registerDialog")
-         */
     }
 
     private fun showRegisteredUsersDialog() {
@@ -169,5 +155,6 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         editor.putString(USER_KEY, userId.toString())
         editor.apply()
     }
+
 
 }

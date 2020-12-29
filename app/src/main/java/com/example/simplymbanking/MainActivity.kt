@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.simplymbanking.fragments.AccountListFragment
 import com.example.simplymbanking.fragments.LoginFragment
 import com.example.simplymbanking.fragments.RegisterFragment
+import com.example.simplymbanking.fragments.TransactionListFragment
 import java.util.*
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks, LoginFragment.CallbacksLogin {
+class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks, LoginFragment.CallbacksLogin,
+    AccountListFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +19,7 @@ class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks, LoginFragm
 
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment == null) {
-            val fragment = RegisterFragment()
+            val fragment = LoginFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
@@ -50,6 +52,15 @@ class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks, LoginFragm
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
+            .commit()
+    }
+
+    override fun onAccountSelected(userId: UUID, accountId: String) {
+        val fragment = TransactionListFragment.newInstance(userId, accountId)
+        supportFragmentManager
+            .beginTransaction().setCustomAnimations(R.anim.fragment_open_enter, R.anim.fragment_open_exit)
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
             .commit()
     }
 

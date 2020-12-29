@@ -51,27 +51,8 @@
         android:textColor="@color/Black"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/transaction_type_text_view"
-        app:layout_constraintEnd_toStartOf="@+id/transaction_currency"
-        app:layout_constraintHorizontal_bias="0.5"
-
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/transaction_type_text_view"
         app:layout_constraintTop_toBottomOf="@id/transaction_description_text_view" />
-
-    <TextView
-        android:id="@+id/transaction_currency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:fontFamily="@font/roboto_slab_bold"
-        android:text="HRK"
-        android:textColor="@color/Black"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/transaction_amount_text_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/transaction_amount_text_view"
-        app:layout_constraintTop_toTopOf="@id/transaction_amount_text_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

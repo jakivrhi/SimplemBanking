@@ -1,13 +1,12 @@
 package com.example.simplymbanking.models
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class Transaction(
     @SerializedName("id") val id: Int,
-    @SerializedName("date") var date: Date = Date(),
+    @SerializedName("date") var date: String,
     @SerializedName("description") var description: String,
-    //@SerializedName("amount") var amount: Double,
+    @SerializedName("amount") var amount: String,
     @SerializedName("type") val transactionType: String = ""
 ) {
 }

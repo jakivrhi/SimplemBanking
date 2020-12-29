@@ -12,6 +12,6 @@ class SimplymBankingApplication : Application() {
         UserRepository.initialize(this)
 
         //HANDSHAKE FAILED ERROR, DONT KNOW WHY
-
+        
     }
 }

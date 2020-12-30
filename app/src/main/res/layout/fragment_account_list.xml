@@ -5,6 +5,17 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp">
 
+    <ImageButton
+        android:id="@+id/logout_image_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_logout_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toTopOf="@id/hello_there_text_view"
+        app:layout_constraintBottom_toBottomOf="@id/user_first_last_name_text_view"
+        />
+
     <TextView
         android:id="@+id/hello_there_text_view"
         android:layout_width="wrap_content"

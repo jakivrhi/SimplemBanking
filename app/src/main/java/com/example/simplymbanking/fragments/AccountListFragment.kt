@@ -1,5 +1,6 @@
 package com.example.simplymbanking.fragments
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -7,8 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +24,7 @@ import com.example.simplymbanking.models.Account
 import com.example.simplymbanking.models.User
 import com.example.simplymbanking.viewmodels.UserListViewModel
 import java.util.*
+import kotlin.system.exitProcess
 
 private const val ARG_USER_ID = "user_id"
 
@@ -25,8 +32,8 @@ class AccountListFragment : Fragment() {
 
     interface Callbacks {
         fun onAccountSelected(userId: UUID, accountId: String)
+        fun onLogoutSelected()
     }
-
     private var callbacks: Callbacks? = null
 
     private lateinit var user: User
@@ -36,6 +43,7 @@ class AccountListFragment : Fragment() {
 
     private var pinPin: String = ""
     private lateinit var userFirstLastName: TextView
+    private lateinit var logoutImageButton: ImageButton
 
     private val userListViewModel: UserListViewModel by lazy {
         ViewModelProvider(this).get(UserListViewModel::class.java)
@@ -51,6 +59,7 @@ class AccountListFragment : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 //System.exit(0)
+                exitDialog(view!!)
             }
         })
         user = User()
@@ -67,6 +76,7 @@ class AccountListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_account_list, container, false)
 
         userFirstLastName = view.findViewById(R.id.user_first_last_name_text_view) as TextView
+        logoutImageButton = view.findViewById(R.id.logout_image_button) as ImageButton
 
         accountsRecyclerView = view.findViewById(R.id.accounts_recycler_view) as RecyclerView
         accountsRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -88,6 +98,12 @@ class AccountListFragment : Fragment() {
         )
     }
 
+    override fun onStart() {
+        super.onStart()
+        logoutImageButton.setOnClickListener {
+            showAreYoUSureDialog(it)
+        }
+    }
 
     override fun onDetach() {
         super.onDetach()
@@ -131,7 +147,6 @@ class AccountListFragment : Fragment() {
             }
         }
 
-
     }
 
     private inner class AccountAdapter(var accounts: List<Account>) :
@@ -155,11 +170,57 @@ class AccountListFragment : Fragment() {
     }
 
     private fun updateUI(user: User) {
-
         adapter = AccountAdapter(user.accountList)
         accountsRecyclerView.adapter = adapter
 
         userFirstLastName.text = user.name + " " + user.surname
         Log.d("TAG", "updateUI: " + user.accountList[0].amount)
+    }
+
+    private fun showAreYoUSureDialog(view: View) {
+        val dialog = Dialog(view.context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.are_you_sure_logout_dialog)
+        val btnYes = dialog.findViewById(R.id.yes_logout_button) as Button
+        val btnNo = dialog.findViewById(R.id.no_logout_button) as Button
+        btnYes.setOnClickListener {
+            callbacks?.onLogoutSelected()
+            dialog.dismiss()
+        }
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+        //size of dialog
+        dialog.window?.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
+    }
+
+    private fun exitDialog(view: View) {
+        val dialog = Dialog(view.context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.are_you_sure_logout_dialog)
+        val btnYes = dialog.findViewById(R.id.yes_logout_button) as Button
+        val btnNo = dialog.findViewById(R.id.no_logout_button) as Button
+        var toolbar = dialog.findViewById(R.id.toolbar_dialog) as Toolbar
+        toolbar.title = "Are you sure you want to exit?"
+        btnYes.setOnClickListener {
+            exitProcess(0)
+        }
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+        //size of dialog
+        dialog.window?.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
     }
 }

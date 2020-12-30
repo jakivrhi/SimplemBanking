@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks, LoginFragm
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
             .commit()
     }
 
@@ -58,9 +57,18 @@ class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks, LoginFragm
     override fun onAccountSelected(userId: UUID, accountId: String) {
         val fragment = TransactionListFragment.newInstance(userId, accountId)
         supportFragmentManager
-            .beginTransaction().setCustomAnimations(R.anim.fragment_open_enter, R.anim.fragment_open_exit)
+            .beginTransaction()
+            .setCustomAnimations(R.anim.fragment_open_enter, R.anim.fragment_open_exit)
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
+            .commit()
+    }
+
+    override fun onLogoutSelected() {
+        val fragment = LoginFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 

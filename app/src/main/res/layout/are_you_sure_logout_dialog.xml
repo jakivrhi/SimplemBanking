@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="32dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/darkRed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Are you sure you want to logout?"
+        app:titleTextColor="@color/White" />
+
+    <Button
+        android:id="@+id/yes_logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:background="@drawable/pin_button_background"
+        android:text="YES"
+        android:textColor="@color/White"
+        app:layout_constraintEnd_toStartOf="@+id/no_logout_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_dialog" />
+
+    <Button
+        android:id="@+id/no_logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pin_button_background"
+        android:text="NO"
+        android:textColor="@color/White"
+        app:layout_constraintBottom_toBottomOf="@id/yes_logout_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/yes_logout_button"
+        app:layout_constraintTop_toTopOf="@id/yes_logout_button" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

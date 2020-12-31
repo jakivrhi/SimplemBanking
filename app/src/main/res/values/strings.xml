@@ -11,4 +11,6 @@
     <string name="enter_your_pin">Enter your PIN</string>
     <string name="balance">Balance</string>
     <string name="last_transactions">Last transactions</string>
+    <string name="stay_safe">Stay safe!</string>
+    <string name="welcome_back">Welcome back</string>
 </resources>

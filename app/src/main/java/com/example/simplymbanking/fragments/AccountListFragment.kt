@@ -41,8 +41,8 @@ class AccountListFragment : Fragment() {
     private lateinit var accountsRecyclerView: RecyclerView
     private var adapter: AccountAdapter? = AccountAdapter(emptyList())
 
-    private var pinPin: String = ""
     private lateinit var userFirstLastName: TextView
+    private lateinit var helloThereTextView : TextView
     private lateinit var logoutImageButton: ImageButton
 
     private val userListViewModel: UserListViewModel by lazy {
@@ -77,7 +77,7 @@ class AccountListFragment : Fragment() {
 
         userFirstLastName = view.findViewById(R.id.user_first_last_name_text_view) as TextView
         logoutImageButton = view.findViewById(R.id.logout_image_button) as ImageButton
-
+        helloThereTextView = view.findViewById(R.id.hello_there_text_view) as TextView
         accountsRecyclerView = view.findViewById(R.id.accounts_recycler_view) as RecyclerView
         accountsRecyclerView.layoutManager = LinearLayoutManager(context)
         accountsRecyclerView.adapter = adapter
@@ -96,6 +96,8 @@ class AccountListFragment : Fragment() {
                 }
             }
         )
+
+        greetBasedOnTime(helloThereTextView)
     }
 
     override fun onStart() {
@@ -222,5 +224,32 @@ class AccountListFragment : Fragment() {
             ConstraintLayout.LayoutParams.MATCH_PARENT,
             ConstraintLayout.LayoutParams.WRAP_CONTENT
         )
+    }
+
+    private fun greetBasedOnTime(textView: TextView){
+        //Get the time of day
+        val date = Date()
+        val cal = Calendar.getInstance()
+        cal.time = date
+        val hour = cal[Calendar.HOUR_OF_DAY]
+
+        var greeting: String = ""
+
+        greeting = when (hour) {
+            in 12..16 -> {
+                "Good Afternoon";
+            }
+            in 17..20 -> {
+                "Good Evening";
+            }
+            in 21..23 -> {
+                "Good Night";
+            }
+            else -> {
+                "Good Morning";
+            }
+        }
+
+        textView.text = greeting
     }
 }

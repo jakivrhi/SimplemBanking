@@ -43,7 +43,11 @@ class MainActivity : AppCompatActivity(), RegisterFragment.Callbacks, LoginFragm
     }
 
     override fun onLoginDialogFinished(userId: UUID) {
-        //
+        val fragment = AccountListFragment.newInstance(userId)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 
     override fun goToFragmentRegister() {

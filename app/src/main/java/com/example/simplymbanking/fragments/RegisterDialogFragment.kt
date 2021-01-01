@@ -8,10 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.simplymbanking.R
 
@@ -39,6 +36,7 @@ class RegisterDialogFragment() : DialogFragment() {
     private lateinit var pinEditText: EditText
     private lateinit var deleteButton: ImageButton
     private lateinit var registerButton: Button
+    private lateinit var registrationOrLogin: TextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,8 +66,14 @@ class RegisterDialogFragment() : DialogFragment() {
         registerButton = view.findViewById(R.id.register_button) as Button
         pinEditText = view.findViewById(R.id.pin_register_edit_text) as EditText
         deleteButton = view.findViewById(R.id.keyboard_delete_number_image_button) as ImageButton
+        registrationOrLogin = view.findViewById(R.id.registration_or_login_text_view) as TextView
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        registrationOrLogin.text = "Registration"
     }
 
     override fun onStart() {
@@ -150,34 +154,38 @@ class RegisterDialogFragment() : DialogFragment() {
 
     private fun deleteLastNumber() {
         var text: String = pinEditText.text.toString()
-        if(text.isNotEmpty()){
+        if (text.isNotEmpty()) {
             text = text.removeRange(text.length - 1, text.length)
         }
 
         pinEditText.setText(text)
     }
 
-    private fun enableDisableButton(){
+    private fun enableDisableButton() {
         registerButton.isEnabled = false
         deleteButton.isEnabled = false
-        pinEditText.addTextChangedListener(object: TextWatcher {
-            override fun onTextChanged(s:CharSequence, start:Int, before:Int, count:Int) {
-                registerButton.isEnabled = s.toString().trim{ it <= ' ' }.length >= 4
-                button0.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button1.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button2.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button3.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button4.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button5.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button6.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button7.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button8.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
-                button9.isEnabled = s.toString().trim{ it <= ' ' }.length < 6
+        pinEditText.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                registerButton.isEnabled = s.toString().trim { it <= ' ' }.length >= 4
+                button0.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button1.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button2.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button3.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button4.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button5.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button6.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button7.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button8.isEnabled = s.toString().trim { it <= ' ' }.length < 6
+                button9.isEnabled = s.toString().trim { it <= ' ' }.length < 6
                 deleteButton.isEnabled = s.toString().trim { it <= ' ' }.isNotEmpty()
             }
-            override fun beforeTextChanged(s:CharSequence, start:Int, count:Int,
-                                           after:Int) {
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int, count: Int,
+                after: Int
+            ) {
             }
+
             override fun afterTextChanged(s: Editable) {
             }
         })

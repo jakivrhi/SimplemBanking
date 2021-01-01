@@ -24,7 +24,6 @@ import com.example.simplymbanking.models.Account
 import com.example.simplymbanking.models.User
 import com.example.simplymbanking.viewmodels.UserListViewModel
 import java.util.*
-import kotlin.system.exitProcess
 
 private const val ARG_USER_ID = "user_id"
 
@@ -136,7 +135,7 @@ class AccountListFragment : Fragment() {
         fun bind(account: Account) {
             this.account = account
             accountIbanTextView.text = account.iban
-            accountBalanceAmountTextView.text = account.amount.toString()
+            accountBalanceAmountTextView.text = account.amount
             accountBalanceCurrency.text = account.currency
         }
 
@@ -212,7 +211,8 @@ class AccountListFragment : Fragment() {
         var toolbar = dialog.findViewById(R.id.toolbar_dialog) as Toolbar
         toolbar.title = "Are you sure you want to exit?"
         btnYes.setOnClickListener {
-            exitProcess(0)
+            callbacks?.onLogoutSelected()
+            dialog.dismiss()
         }
         btnNo.setOnClickListener {
             dialog.dismiss()
@@ -249,7 +249,6 @@ class AccountListFragment : Fragment() {
                 "Good Morning";
             }
         }
-
         textView.text = greeting
     }
 }

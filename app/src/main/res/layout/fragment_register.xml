@@ -80,6 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="64dp"
             android:background="@drawable/custom_input_edit_text"
             android:drawableStart="@drawable/custom_edit_text_person_icon"
@@ -90,11 +91,9 @@
             android:maxLines="1"
             android:padding="8dp"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/last_name_edit_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/underline_button" />
+            app:layout_constraintTop_toBottomOf="@id/underline_button" />
 
         <EditText
             android:id="@+id/last_name_edit_text"
@@ -111,11 +110,10 @@
             android:maxLines="1"
             android:padding="8dp"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/continue_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toBottomOf="@id/first_name_edit_text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/first_name_edit_text" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp"/>
 
         <Button
             android:id="@+id/continue_button"
@@ -132,7 +130,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/last_name_edit_text" />
+            app:layout_constraintTop_toBottomOf="@+id/underline_button" />
 
         <TextView
             android:id="@+id/welcome_question_text_view"
@@ -153,8 +151,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_slab_bold"
-            android:textColor="@color/Black"
             android:gravity="center"
+            android:textColor="@color/Black"
             android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

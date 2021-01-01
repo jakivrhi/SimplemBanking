@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -28,6 +29,9 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
     //interface method
     override fun sendLoginPinToFragment(pin: String) {
         checkPin.value = pin
+        if(pin != user.pin){
+            Toast.makeText(context, "Wrong PIN", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun sendChosenRegisteredUser(id: UUID) {
@@ -75,6 +79,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         checkPin.value = ""
         userNamePref = ""
         userSurnamePref = ""
+        userId = UUID.randomUUID()
         loadUserPreferences()
     }
 
@@ -229,7 +234,6 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         }catch (e : Exception){
             //
         }
-
     }
 
 }

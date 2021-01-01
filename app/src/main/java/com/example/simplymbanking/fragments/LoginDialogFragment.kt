@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.simplymbanking.R
 
@@ -37,6 +38,7 @@ class LoginDialogFragment : DialogFragment() {
     private lateinit var pinEditText: EditText
     private lateinit var deleteButton: ImageButton
     private lateinit var loginButton: Button
+    private lateinit var registrationOrLogin : TextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,6 +68,7 @@ class LoginDialogFragment : DialogFragment() {
         pinEditText = view.findViewById(R.id.pin_register_edit_text) as EditText
         deleteButton = view.findViewById(R.id.keyboard_delete_number_image_button) as ImageButton
         loginButton = view.findViewById(R.id.register_button) as Button
+        registrationOrLogin = view.findViewById(R.id.registration_or_login_text_view) as TextView
 
         return view
     }
@@ -73,6 +76,7 @@ class LoginDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loginButton.text = "LOGIN"
+        registrationOrLogin.text = "Login"
     }
 
     override fun onStart() {

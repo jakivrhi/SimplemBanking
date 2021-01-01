@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -121,10 +122,14 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         user = User()
 
         continueButton.setOnClickListener {
-            user.name = firstNameEditText.text.toString()
-            user.surname = lastNameEditText.text.toString()
+            if(firstNameEditText.text.toString() == "" || lastNameEditText.text.toString() == ""){
+                Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            }else{
+                user.name = firstNameEditText.text.toString()
+                user.surname = lastNameEditText.text.toString()
 
-            showDialog()
+                showDialog()
+            }
         }
 
         finishRegistrationButton.setOnClickListener {

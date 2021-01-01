@@ -37,6 +37,8 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
     override fun sendChosenRegisteredUser(id: UUID) {
         userListViewModel.loadUser(id)
         checkPin.value = ""
+        //tu bi trebao spremiti id??
+
     }
 
     interface CallbacksLogin {
@@ -115,6 +117,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
                 }
             }
         )
+        userListViewModel.loadUser(userId)
         checkPin.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (checkPin.value == user.pin && checkPin.value?.length!! >= 4) {
                 welcomeBackTextView.visibility = View.VISIBLE
@@ -146,7 +149,9 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         userSurnameLoginTextView.text = user.surname
 
         loginButton.setOnClickListener {
+            /*
             userListViewModel.loadUser(userId)
+             */
             user.name = userNameLoginTextView.text.toString()
             user.surname = userSurnameLoginTextView.text.toString()
 
@@ -171,6 +176,11 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        userListViewModel.loadUser(userId)
+    }
+
     override fun onDetach() {
         super.onDetach()
         callbacksLogin = null
@@ -181,6 +191,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         userSurnameLoginTextView.text = user.surname
         userNamePref = user.name
         userSurnamePref = user.surname
+        userId = user.id
         saveUserPreferences()
         //spremiti user.id i FALSE  u shared pref
         //nakon unosa ispravnog PIN-a , shared pref TRUE
@@ -222,8 +233,8 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         val sharedPreferences =
             activity?.getSharedPreferences("shared preferences user", Context.MODE_PRIVATE)
 
-        userNamePref = sharedPreferences?.getString(NAME_KEY, "default").toString()
-        userSurnamePref = sharedPreferences?.getString(SURNAME_KEY, "other").toString()
+        userNamePref = sharedPreferences?.getString(NAME_KEY, "Choose").toString()
+        userSurnamePref = sharedPreferences?.getString(SURNAME_KEY, "user").toString()
 
         val gson: Gson = Gson()
         val json: String = sharedPreferences?.getString(USER_KEY, "def").toString()

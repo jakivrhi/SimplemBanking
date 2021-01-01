@@ -142,7 +142,7 @@ class RegisterFragment : Fragment(), RegisterDialogFragment.OnPinEntered {
         }
 
         cancelRegistrationButton.setOnClickListener {
-
+            callbacks?.goToFragmentLogin()
         }
 
         loginTextViewClickable.setOnClickListener {

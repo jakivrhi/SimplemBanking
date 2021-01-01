@@ -1,13 +1,18 @@
 package com.example.simplymbanking.fragments
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -73,7 +78,7 @@ class RegisteredUsersListFragment : DialogFragment() {
 
     }
 
-    private inner class RegisteredUsersHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private inner class RegisteredUsersHolder(view: View) : RecyclerView.ViewHolder(view), View.OnLongClickListener {
         private lateinit var user: User
         val registeredUserName: TextView =
             itemView.findViewById(R.id.registered_user_name_list_item)
@@ -98,7 +103,45 @@ class RegisteredUsersListFragment : DialogFragment() {
                     dismiss()
                 }
             }
+            itemView.setOnLongClickListener(this)
         }
+
+        override fun onLongClick(v: View?): Boolean {
+            if (itemView.isPressed){
+                exitDialog(view!!)
+                return true
+            }else{
+                return false
+            }
+        }
+
+        private fun exitDialog(view: View) {
+            val dialog = Dialog(view.context)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setCancelable(false)
+            dialog.setContentView(R.layout.are_you_sure_logout_dialog)
+            val btnYes = dialog.findViewById(R.id.yes_logout_button) as Button
+            val btnNo = dialog.findViewById(R.id.no_logout_button) as Button
+            var toolbar = dialog.findViewById(R.id.toolbar_dialog) as Toolbar
+            toolbar.title = "Are you sure you want to delete user?"
+            btnYes.setOnClickListener {
+                userListViewModel.deleteUser(user)
+                dialog.dismiss()
+            }
+            btnNo.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.setCanceledOnTouchOutside(true)
+            dialog.show()
+            //size of dialog
+            dialog.window?.setLayout(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+
+
     }
 
     private inner class RegisteredUsersAdapter(var registeredUsers: List<User>) :

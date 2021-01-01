@@ -50,6 +50,12 @@ class UserRepository private constructor(context: Context) {
         }
     }
 
+    fun deleteUser(user: User) {
+        executor.execute {
+            userDao.deleteUser(user)
+        }
+    }
+
     //UserRepository is a singleton (only 1 will exist in app process)
     companion object {
         private var INSTANCE: UserRepository? = null

@@ -31,4 +31,9 @@ class UserListViewModel : ViewModel() {
     fun registerUser(user: User) {
         userRepository.registerUser(user)
     }
+
+    //delete user
+    fun deleteUser(user: User){
+        userRepository.deleteUser(user)
+    }
 }

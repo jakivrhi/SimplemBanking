@@ -2,6 +2,7 @@ package com.example.simplymbanking.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.simplymbanking.models.User
@@ -24,4 +25,7 @@ interface UserDao {
 
     @Insert
     fun registerUser(user: User)
+
+    @Delete
+    fun deleteUser(user : User)
 }

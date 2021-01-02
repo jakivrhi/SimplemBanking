@@ -3,7 +3,6 @@ package com.example.simplymbanking.database
 import androidx.room.TypeConverter
 import com.example.simplymbanking.models.Account
 import com.example.simplymbanking.models.Transaction
-import com.example.simplymbanking.models.TransactionType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
@@ -47,17 +46,6 @@ class UserTypeConverters {
         if (list == null) return null
         val type = object : TypeToken<List<Transaction>>() {}.type
         return Gson().toJson(list, type)
-    }
-
-    //for enum TransactionType
-    @TypeConverter
-    fun toFriendshipStage(transactionType: String): TransactionType? {
-        return TransactionType.valueOf(transactionType)
-    }
-
-    @TypeConverter
-    fun fromFriendshipStage(transactionType: TransactionType): String {
-        return transactionType.toString()
     }
 
     @TypeConverter

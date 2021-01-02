@@ -125,13 +125,8 @@ class RegisterDialogFragment() : DialogFragment() {
                     "Sucessfully registered pin is $pin",
                     Toast.LENGTH_SHORT
                 ).show()
-                //send data back to last fragment
-                //val listener: Callbacks? = targetFragment as Callbacks?
-                //listener?.onDialogFinished(pin)
-
                 onPinEntered?.sendPinToFragment(pin)
                 this.dismiss()
-                //parentFragmentManager.popBackStack()
 
             } else {
                 Toast.makeText(

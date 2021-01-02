@@ -57,12 +57,10 @@ class AccountListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                //System.exit(0)
                 exitDialog(view!!)
             }
         })
         user = User()
-
         val userId: UUID = arguments?.getSerializable(ARG_USER_ID) as UUID
         userListViewModel.loadUser(userId)
     }

@@ -38,7 +38,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
     override fun sendLoginPinToFragment(pin: String) {
         checkPin.value = pin
         if (pin != user.pin) {
-            Toast.makeText(context, "Wrong PIN", Toast.LENGTH_SHORT).show()
+            notifyUserToast("Wrong PIN")
         }
     }
 
@@ -166,6 +166,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
                 userNameLoginTextView.visibility = View.INVISIBLE
                 userSurnameLoginTextView.visibility = View.INVISIBLE
                 underlineButton.visibility = View.INVISIBLE
+                fingerprintButton.visibility = View.INVISIBLE
                 userNameTextView.text = user.name
             }
         })
@@ -183,9 +184,6 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         userSurnameLoginTextView.text = user.surname
 
         loginButton.setOnClickListener {
-            /*
-            userListViewModel.loadUser(userId)
-             */
             user.name = userNameLoginTextView.text.toString()
             user.surname = userSurnameLoginTextView.text.toString()
 
@@ -194,10 +192,6 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
 
         finishLoginButton.setOnClickListener {
             userListViewModel.loadUser(user.id)
-            /*
-            I SALJI GA DALJE U AccountListFragment()
-            ili, spremi u shared pref?
-             */
             callbacksLogin?.onLoginDialogFinished(user.id)
         }
 
@@ -213,9 +207,9 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         fingerprintButton.setOnClickListener {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
                 val biometricPrompt = BiometricPrompt.Builder(context)
-                    .setTitle("Title of prompt")
+                    .setTitle("Simply mBanking login authentication")
                     .setSubtitle("Authentication is required")
-                    .setDescription("This app uses fingerprint scanner to make your life easier")
+                    .setDescription("Secure and fast login")
                     .setNegativeButton(
                         "Cancel",
                         context!!.mainExecutor,
@@ -250,8 +244,6 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         userSurnamePref = user.surname
         userId = user.id
         saveUserPreferences()
-        //spremiti user.id i FALSE  u shared pref
-        //nakon unosa ispravnog PIN-a , shared pref TRUE
     }
 
     private fun showDialog() {

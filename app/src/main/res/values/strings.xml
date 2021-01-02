@@ -12,5 +12,8 @@
     <string name="balance">Balance</string>
     <string name="last_transactions">Last transactions</string>
     <string name="stay_safe">Stay safe!</string>
-    <string name="welcome_back">Welcome back</string>
+    <string name="fingerprint">Fingerprint login</string>
+    <string name="yes_caps">YES</string>
+    <string name="no_caps">NO</string>
+    <string name="choose_account">Choose account</string>
 </resources>

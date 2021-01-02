@@ -73,11 +73,6 @@ class RegisteredUsersListFragment : DialogFragment() {
         )
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
-
     private inner class RegisteredUsersHolder(view: View) : RecyclerView.ViewHolder(view), View.OnLongClickListener {
         private lateinit var user: User
         val registeredUserName: TextView =

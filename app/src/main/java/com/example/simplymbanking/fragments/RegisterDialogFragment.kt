@@ -120,11 +120,6 @@ class RegisterDialogFragment() : DialogFragment() {
             pin = this.pinEditText.text.toString()
 
             if (validatePin(pin.length)) {
-                Toast.makeText(
-                    context,
-                    "Sucessfully registered pin is $pin",
-                    Toast.LENGTH_SHORT
-                ).show()
                 onPinEntered?.sendPinToFragment(pin)
                 this.dismiss()
 

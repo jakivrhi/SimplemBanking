@@ -45,8 +45,6 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
     override fun sendChosenRegisteredUser(id: UUID) {
         userListViewModel.loadUser(id)
         checkPin.value = ""
-        //tu bi trebao spremiti id??
-
     }
 
     interface CallbacksLogin {
@@ -81,7 +79,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         ViewModelProvider(this).get(UserListViewModel::class.java)
     }
 
-    //BIOMETRICS
+    //BIOMETRICS variables
     private var cancellationSignal: CancellationSignal? = null
     private val authenticationCallback: BiometricPrompt.AuthenticationCallback
         get() =
@@ -184,10 +182,15 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         userSurnameLoginTextView.text = user.surname
 
         loginButton.setOnClickListener {
-            user.name = userNameLoginTextView.text.toString()
-            user.surname = userSurnameLoginTextView.text.toString()
+            if (userNameLoginTextView.text.toString() == "Choose or create a") {
+                Toast.makeText(context, "Please register of choose a user", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                user.name = userNameLoginTextView.text.toString()
+                user.surname = userSurnameLoginTextView.text.toString()
 
-            showDialog()
+                showDialog()
+            }
         }
 
         finishLoginButton.setOnClickListener {
@@ -205,25 +208,31 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
 
 
         fingerprintButton.setOnClickListener {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                val biometricPrompt = BiometricPrompt.Builder(context)
-                    .setTitle("Simply mBanking login authentication")
-                    .setSubtitle("Authentication is required")
-                    .setDescription("Secure and fast login")
-                    .setNegativeButton(
-                        "Cancel",
-                        context!!.mainExecutor,
-                        DialogInterface.OnClickListener { dialog, which ->
-                            notifyUserToast("Authentication cancelled")
-                        }).build()
-                biometricPrompt.authenticate(
-                    getCancellationSignal(),
-                    context!!.mainExecutor,
-                    authenticationCallback
-                )
+            if (userNameLoginTextView.text.toString() == "Choose or create a") {
+                Toast.makeText(context, "Please register of choose a user", Toast.LENGTH_SHORT)
+                    .show()
             } else {
-                notifyUserToast("Too low version of Android")
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                    val biometricPrompt = BiometricPrompt.Builder(context)
+                        .setTitle("Simply mBanking login authentication")
+                        .setSubtitle("Authentication is required")
+                        .setDescription("Secure and fast login")
+                        .setNegativeButton(
+                            "Cancel",
+                            context!!.mainExecutor,
+                            DialogInterface.OnClickListener { dialog, which ->
+                                notifyUserToast("Authentication cancelled")
+                            }).build()
+                    biometricPrompt.authenticate(
+                        getCancellationSignal(),
+                        context!!.mainExecutor,
+                        authenticationCallback
+                    )
+                } else {
+                    notifyUserToast("Too low version of Android")
+                }
             }
+
         }
     }
 
@@ -282,7 +291,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         val sharedPreferences =
             activity?.getSharedPreferences("shared preferences user", Context.MODE_PRIVATE)
 
-        userNamePref = sharedPreferences?.getString(NAME_KEY, "Choose").toString()
+        userNamePref = sharedPreferences?.getString(NAME_KEY, "Choose or create a").toString()
         userSurnamePref = sharedPreferences?.getString(SURNAME_KEY, "user").toString()
 
         val gson: Gson = Gson()

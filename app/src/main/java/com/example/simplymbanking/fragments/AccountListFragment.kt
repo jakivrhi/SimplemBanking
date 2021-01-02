@@ -84,7 +84,6 @@ class AccountListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         userListViewModel.userLiveData.observe(
             viewLifecycleOwner, androidx.lifecycle.Observer { user ->
                 user?.let {
@@ -93,7 +92,6 @@ class AccountListFragment : Fragment() {
                 }
             }
         )
-
         greetBasedOnTime(helloThereTextView)
     }
 

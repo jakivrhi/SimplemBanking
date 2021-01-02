@@ -91,7 +91,7 @@ class RegisteredUsersListFragment : DialogFragment() {
                 if (itemView.isPressed) {
                     Toast.makeText(
                         context,
-                        "Clicked on ${registeredUserName.text} ${registeredUserSurname.text}",
+                        "${registeredUserName.text} ${registeredUserSurname.text} is active",
                         Toast.LENGTH_SHORT
                     ).show()
                     chosenRegisteredUser?.sendChosenRegisteredUser(user.id)

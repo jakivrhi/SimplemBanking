@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.simplymbanking.api.ZadatakApi
 import com.example.simplymbanking.models.AccountList
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -29,9 +31,12 @@ class ZadatakFetchr {
             .connectionSpecs(tlsSpecs)
             .build()
 
+
+        val gson : Gson = GsonBuilder().setDateFormat("dd.MM.yyyy.").create()
+
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://mobile.asseco-see.hr/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()
 

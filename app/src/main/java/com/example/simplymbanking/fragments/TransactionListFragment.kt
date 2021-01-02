@@ -13,6 +13,7 @@ import com.example.simplymbanking.R
 import com.example.simplymbanking.models.Transaction
 import com.example.simplymbanking.models.User
 import com.example.simplymbanking.viewmodels.UserListViewModel
+import java.text.SimpleDateFormat
 import java.util.*
 
 private const val TAG = "TransactionListFragment"
@@ -95,7 +96,12 @@ class TransactionListFragment : Fragment() {
         override fun onBindViewHolder(holder: TransactionHolder, position: Int) {
             val transaction = transactions[position]
             holder.apply {
-                transactionDateTextView.text = transaction.date
+                //losije rjesenje
+                val date = transaction.date
+                val pattern: String = "dd.MM.yyyy."
+                val simpleDateFormat = SimpleDateFormat(pattern)
+                val stringDate = simpleDateFormat.format(date)
+                transactionDateTextView.text = stringDate
                 transactionTypeTextView.text = transaction.transactionType
                 transactionDescriptionTextView.text = transaction.description
                 transactionAmountTextView.text = transaction.amount
@@ -113,7 +119,10 @@ class TransactionListFragment : Fragment() {
         accountBalanceAmountTextView.text = user.accountList[accountId.toInt() - 1].amount
         accountAmountCurrencyTextView.text = user.accountList[accountId.toInt() - 1].currency
 
-        adapter = TransactionAdapter(user.accountList[accountId.toInt() - 1].transList)
+        val list : List<Transaction> = user.accountList[accountId.toInt()-1].transList
+
+        Collections.sort(list)
+        adapter = TransactionAdapter(list)
         transactionRecyclerView.adapter = adapter
         userNameSurnameTextView.text = user.name + " " + user.surname
     }

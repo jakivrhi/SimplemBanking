@@ -1,13 +1,21 @@
 package com.example.simplymbanking.fragments
 
+import android.app.KeyguardManager
 import android.content.Context
+import android.content.DialogInterface
+import android.content.pm.PackageManager
+import android.hardware.biometrics.BiometricPrompt
+import android.os.Build
 import android.os.Bundle
+import android.os.CancellationSignal
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -29,7 +37,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
     //interface method
     override fun sendLoginPinToFragment(pin: String) {
         checkPin.value = pin
-        if(pin != user.pin){
+        if (pin != user.pin) {
             Toast.makeText(context, "Wrong PIN", Toast.LENGTH_SHORT).show()
         }
     }
@@ -67,9 +75,31 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
 
     private lateinit var userId: UUID
 
+    private lateinit var fingerprintButton: Button
+
     private val userListViewModel: UserListViewModel by lazy {
         ViewModelProvider(this).get(UserListViewModel::class.java)
     }
+
+    //BIOMETRICS
+    private var cancellationSignal: CancellationSignal? = null
+    private val authenticationCallback: BiometricPrompt.AuthenticationCallback
+        get() =
+            @RequiresApi(Build.VERSION_CODES.P)
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                    super.onAuthenticationError(errorCode, errString)
+                    notifyUserToast("Authentication error $errString")
+                }
+
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+                    super.onAuthenticationSucceeded(result)
+                    notifyUserToast("Authentication success")
+                    userListViewModel.loadUser(user.id)
+                    callbacksLogin?.onLoginDialogFinished(user.id)
+                }
+
+            }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -83,6 +113,9 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         userSurnamePref = ""
         userId = UUID.randomUUID()
         loadUserPreferences()
+
+        checkBiometricSupport()
+
     }
 
     override fun onCreateView(
@@ -104,6 +137,7 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         userSurnameLoginTextView = view.findViewById(R.id.user_surname_login_text_view) as TextView
         lottieAnim = view.findViewById(R.id.lottie_animation) as LottieAnimationView
         staySafeTextView = view.findViewById(R.id.stay_safe_text_view) as TextView
+        fingerprintButton = view.findViewById(R.id.finish_login_fingerprint_button) as Button
         return view
     }
 
@@ -174,6 +208,29 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         changeUserTextViewClickable.setOnClickListener {
             showRegisteredUsersDialog()
         }
+
+
+        fingerprintButton.setOnClickListener {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                val biometricPrompt = BiometricPrompt.Builder(context)
+                    .setTitle("Title of prompt")
+                    .setSubtitle("Authentication is required")
+                    .setDescription("This app uses fingerprint scanner to make your life easier")
+                    .setNegativeButton(
+                        "Cancel",
+                        context!!.mainExecutor,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            notifyUserToast("Authentication cancelled")
+                        }).build()
+                biometricPrompt.authenticate(
+                    getCancellationSignal(),
+                    context!!.mainExecutor,
+                    authenticationCallback
+                )
+            } else {
+                notifyUserToast("Too low version of Android")
+            }
+        }
     }
 
     override fun onResume() {
@@ -242,9 +299,45 @@ class LoginFragment : Fragment(), LoginDialogFragment.LoginPinEntered,
         //error? try
         try {
             userId = gson.fromJson(json, UUID::class.java)
-        }catch (e : Exception){
+        } catch (e: Exception) {
             //
         }
+    }
+
+    private fun getCancellationSignal(): CancellationSignal {
+        cancellationSignal = CancellationSignal()
+        //auth canceled by user
+        cancellationSignal?.setOnCancelListener {
+            notifyUserToast("Authentication was cancelled by user")
+        }
+        return cancellationSignal as CancellationSignal
+    }
+
+    private fun checkBiometricSupport(): Boolean {
+        val keyguardManager = context?.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        if (!keyguardManager.isKeyguardSecure) {
+            notifyUserToast("Please enable fingerprint in your phone settings")
+            return false
+        }
+        //check if user biometrics permission is enabled
+        if (ActivityCompat.checkSelfPermission(
+                context!!,
+                android.Manifest.permission.USE_BIOMETRIC
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            notifyUserToast("Fingerprint auth is not enabled")
+            return false
+        }
+
+        if (context!!.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
+            return true
+        } else {
+            return true
+        }
+    }
+
+    private fun notifyUserToast(msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
 }
